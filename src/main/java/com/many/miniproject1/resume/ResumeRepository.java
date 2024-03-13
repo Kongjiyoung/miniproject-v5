@@ -22,32 +22,10 @@ public class ResumeRepository {
         return query.getResultList();
     }
 
-    public ResumeResponse.DetailDTO findById(int r_id) {
-
-        Query query = em.createNativeQuery("select r.id, r.title, r.profile, r.portfolio, r.introduce, r.career, r.simple_introduce, u.username, u.birth, u.tel, u.address, u.email from resume_tb r inner join user_tb u on r.person_id = u.id where r.id = ?");
-
-        query.setParameter(1, r_id);
-
-        Object[] row = (Object[]) query.getSingleResult();
-
-        Integer id = (Integer) row[0];
-        String title = (String) row[1];
-        String profile = (String) row[2];
-        String portfolio = (String) row[3];
-        String introduce = (String) row[4];
-        String career = (String) row[5];
-        String simpleIntroduce = (String) row[6];
-
-        ResumeResponse.DetailDTO responseDTO = new ResumeResponse.DetailDTO();
-        responseDTO.setId(id);
-        responseDTO.setTitle(title);
-        responseDTO.setProfile(profile);
-        responseDTO.setPortfolio(portfolio);
-        responseDTO.setIntroduce(introduce);
-        responseDTO.setCareer(career);
-        responseDTO.setSimpleIntroduce(simpleIntroduce);
-
-        return responseDTO;
+    public Resume findById(int id) {
+        Query query= em.createQuery("select r from Resume r join fetch r.user u where r.id= :id", Resume.class);
+        query.setParameter("id", id);
+        return (Resume) query.getSingleResult();
     }
 
     // 이력서 insert 한번 하고 -> max id 값 받아서 -> 이력서ID

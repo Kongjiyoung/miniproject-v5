@@ -69,34 +69,15 @@ public class ResumeController{
             return "redirect:/person/loginForm";
         }
 
-//        Resume resume = resumeRepository.findById(id);
-//        List<String> skills = skillRepository.findByResumeId(id);
-//        ResumeResponse.DetailDTO detailDTO = new ResumeResponse.DetailDTO(new Resume());
-//        detailDTO.setSkill(skills);
 
-
-//        List<ResumeResponse.DetailDTO> resumeList = resumeRepository.findResume(sessionUser.getId());
-//        request.setAttribute("resumeList", resumeList);
 //
-//        ArrayList<ResumeResponse.DetailSkillDTO> resumeSkillList = new ArrayList<>();
-//        for (int i = 0; i < resumeList.size(); i++) {
-//            List<String> skills = skillRepository.findByResumeId(resumeList.get(i).getId());
-//            System.out.println(skills);
-//            ResumeResponse.DetailDTO resume = resumeList.get(i);
-//            System.out.println(resume);
+//        ResumeResponse.DetailDTO responseDTO = resumeRepository.findById(id); //스킬빼고 담고온거
+//        List<String> skills = skillRepository.findByResumeId(responseDTO.getId());
+//        ResumeResponse.DetailSkillDTO resumeSkill = new ResumeResponse.DetailSkillDTO(responseDTO, skills);
+//        System.out.println(sessionUser);
+//        request.setAttribute("resume", resumeSkill);
 //
-//            resumeSkillList.add(new ResumeResponse.DetailSkillDTO(resume, skills));
-//            System.out.println(resumeSkillList.get(i));
-//        }
-//        request.setAttribute("resumeSkillList", resumeSkillList);
-
-        ResumeResponse.DetailDTO responseDTO = resumeRepository.findById(id); //스킬빼고 담고온거
-        List<String> skills = skillRepository.findByResumeId(responseDTO.getId());
-        ResumeResponse.DetailSkillDTO resumeSkill = new ResumeResponse.DetailSkillDTO(responseDTO, skills);
-        System.out.println(sessionUser);
-        request.setAttribute("resume", resumeSkill);
-
-        System.out.println(responseDTO);
+//        System.out.println(responseDTO);
 
         return "person/resumeDetail";
     }
@@ -176,10 +157,10 @@ public class ResumeController{
         if (sessionUser == null) {
             return "redirect:/person/loginForm";
         }
-        ResumeResponse.DetailDTO detailDTO = resumeRepository.findById(id);
+        //ResumeResponse.DetailDTO detailDTO = resumeRepository.findById(id);
 //        ResumeResponse.DetailDTO detailDTO= new ResumeResponse.DetailDTO(new Resume());
 
-        request.setAttribute("resume", detailDTO);
+        //request.setAttribute("resume", detailDTO);
         return "person/updateResumeForm";
     }
 
