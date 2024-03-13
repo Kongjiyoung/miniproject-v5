@@ -68,7 +68,8 @@ public class ResumeController{
         if (sessionUser == null) {
             return "redirect:/person/loginForm";
         }
-
+        Resume resume=resumeRepository.findById(id);
+        request.setAttribute("resume", resume);
 
 //
 //        ResumeResponse.DetailDTO responseDTO = resumeRepository.findById(id); //스킬빼고 담고온거
