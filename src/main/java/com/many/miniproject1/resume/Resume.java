@@ -19,7 +19,7 @@ public class Resume {
     private Integer id;
 
     @JoinColumn(name = "person_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     private String title;

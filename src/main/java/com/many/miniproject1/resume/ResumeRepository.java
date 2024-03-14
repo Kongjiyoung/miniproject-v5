@@ -22,46 +22,19 @@ public class ResumeRepository {
         return query.getResultList();
     }
 
-    public Resume findById(int id) {
+    public List<Resume> findPersonId(int id) {
+        Query query = em.createQuery("select r from Resume r where r.user.id = :id order by r.id desc ", Resume.class);
+        query.setParameter("id", id);
+        return query.getResultList();
+    }
+
+    public Resume findByResumeId(int id) {
         Query query= em.createQuery("select r from Resume r join fetch r.user u where r.id= :id", Resume.class);
         query.setParameter("id", id);
         return (Resume) query.getSingleResult();
     }
 
-    // 이력서 insert 한번 하고 -> max id 값 받아서 -> 이력서ID
-    // 스킬을 스킬테이블에 체크박스에 체크된만큼 insert(이력서ID) 하기
-//    @Transactional
-//    public int save(ResumeRequest.SaveDTO requestDTO) {
-//        String q = """
-//                          insert into resume_tb(person_id, title, profile, portfolio, introduce, career,
-//                          simple_introduce, created_at)
-//                          values (?, ?, ?, ?, ?, ?, ?, now());
-//                """;
-//
-//        Query query = em.createNativeQuery(q);
-//
-//        query.setParameter(1, requestDTO.getPersonId());
-//        query.setParameter(2, requestDTO.getTitle());
-//        query.setParameter(3, requestDTO.getProfile());
-//        query.setParameter(4, requestDTO.getPortfolio());
-//        query.setParameter(5, requestDTO.getIntroduce());
-//        query.setParameter(6, requestDTO.getCareer());
-//        query.setParameter(7, requestDTO.getSimpleIntroduce());
-//
-//
-//        query.executeUpdate();
-//
-//        Query maxQquery = em.createNativeQuery("select max(id) from resume_tb");
-//        Integer resumeId = (Integer) maxQquery.getSingleResult();
-//        return resumeId;
-//
-//        // max pk 받아서 리턴!!
-//
-//        // return 이력서 pk값
-//
-//    }
 
-    // 사진 등록
     @Transactional
     public Integer save(ResumeRequest.SaveDTO requestDTO, String profileFileName) {
         String q = """

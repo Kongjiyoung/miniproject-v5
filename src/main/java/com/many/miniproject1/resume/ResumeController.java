@@ -41,21 +41,21 @@ public class ResumeController{
     @GetMapping("/person/resume")
     public String personResumeForm(HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        List<ResumeResponse.DetailDTO> resumeList = resumeRepository.findresume(sessionUser.getId());
-        System.out.println(resumeList.size());
-
-        ArrayList<ResumeResponse.DetailSkillDTO> resumeSkillList = new ArrayList<>();
-        for (int i = 0; i < resumeList.size(); i++) {
-            List<String> skills = skillRepository.findByResumeId(resumeList.get(i).getId());
-            System.out.println(skills);
-            ResumeResponse.DetailDTO resume = resumeList.get(i);
-            System.out.println(resume);
-
-            resumeSkillList.add(new ResumeResponse.DetailSkillDTO(resume, skills));
-            System.out.println(resumeSkillList.get(i));
-        }
-
-        request.setAttribute("resumeSkillList", resumeSkillList);
+//        List<ResumeResponse.DetailDTO> resumeList = resumeRepository.findresume(sessionUser.getId());
+//        System.out.println(resumeList.size());
+//
+//        ArrayList<ResumeResponse.DetailSkillDTO> resumeSkillList = new ArrayList<>();
+//        for (int i = 0; i < resumeList.size(); i++) {
+//            List<String> skills = skillRepository.findByResumeId(resumeList.get(i).getId());
+//            System.out.println(skills);
+//            ResumeResponse.DetailDTO resume = resumeList.get(i);
+//            System.out.println(resume);
+//
+//            resumeSkillList.add(new ResumeResponse.DetailSkillDTO(resume, skills));
+//            System.out.println(resumeSkillList.get(i));
+//        }
+        List<Resume> resumeList = resumeRepository.findPersonId(sessionUser.getId());
+        request.setAttribute("resumeList", resumeList);
 
         return "person/resumes";
     }
@@ -68,17 +68,9 @@ public class ResumeController{
         if (sessionUser == null) {
             return "redirect:/person/loginForm";
         }
-        Resume resume=resumeRepository.findById(id);
+        Resume resume=resumeRepository.findByResumeId(id);
         request.setAttribute("resume", resume);
 
-//
-//        ResumeResponse.DetailDTO responseDTO = resumeRepository.findById(id); //스킬빼고 담고온거
-//        List<String> skills = skillRepository.findByResumeId(responseDTO.getId());
-//        ResumeResponse.DetailSkillDTO resumeSkill = new ResumeResponse.DetailSkillDTO(responseDTO, skills);
-//        System.out.println(sessionUser);
-//        request.setAttribute("resume", resumeSkill);
-//
-//        System.out.println(responseDTO);
 
         return "person/resumeDetail";
     }
