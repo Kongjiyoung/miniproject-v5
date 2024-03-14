@@ -1,4 +1,4 @@
-package com.many.miniproject1;
+package com.many.miniproject1.Resume;
 
 import com.many.miniproject1.resume.Resume;
 import com.many.miniproject1.resume.ResumeRepository;

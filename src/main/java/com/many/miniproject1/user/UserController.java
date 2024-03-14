@@ -75,9 +75,6 @@ public class UserController {
     @PostMapping("/company/login")
     public String companyLogin(UserRequest.LoginDTO requestDTO) {
         System.out.println(requestDTO);
-//        if (requestDTO.getEmail().length() < 3) {
-//            return "error/400";
-//        }
 
         User user = userRepository.findByEmailAndPassword(requestDTO);
         if (user == null) {
