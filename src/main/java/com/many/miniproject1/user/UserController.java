@@ -44,25 +44,8 @@ public class UserController {
     @PostMapping("/company/join")
     public String companyJoin(UserRequest.JoinDTO requestDTO, HttpServletRequest request) {
 
-        MultipartFile profile = requestDTO.getProfile(); // 변경된 변수명으로 수정
-
-        // 2. 파일저장 위치 설정해서 파일을 저장 (UUID 붙여서 롤링)
-        String profileFilename = UUID.randomUUID() + "_" + profile.getOriginalFilename(); // 변경된 변수명으로 수정
-
-        Path profilePath = Paths.get("./images/" + profileFilename); // 변경된 변수명으로 수정
-
-        try {
-            Files.write(profilePath, profile.getBytes());
-
-            // 3. DB에 저장 (title, realFileName)
-//            resumeRepository.save(requestDTO, profileFilename);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        userRepository.companySave(requestDTO, profileFilename);
-        System.out.println(requestDTO);
+        requestDTO.setRole("company");
+        userRepository.personSave(requestDTO.toEntity());
         return "redirect:/company/loginForm";
     }
 
@@ -96,23 +79,8 @@ public class UserController {
 
     @PostMapping("/person/join")
     public String personJoin(UserRequest.JoinDTO requestDTO) {
-        MultipartFile profile = requestDTO.getProfile(); // 변경된 변수명으로 수정
-
-        // 2. 파일저장 위치 설정해서 파일을 저장 (UUID 붙여서 롤링)
-        String profileFilename = UUID.randomUUID() + "_" + profile.getOriginalFilename(); // 변경된 변수명으로 수정
-
-        Path profilePath = Paths.get("./images/" + profileFilename); // 변경된 변수명으로 수정
-
-        try {
-            Files.write(profilePath, profile.getBytes());
-
-            // 3. DB에 저장 (title, realFileName)
-//            resumeRepository.save(requestDTO, profileFilename);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        userRepository.personSave(requestDTO, profileFilename);
+        requestDTO.setRole("person");
+        userRepository.personSave(requestDTO.toEntity());
         return "redirect:/person/loginForm";
     }
 
@@ -225,44 +193,21 @@ public class UserController {
     public String personInfoInfoUpdateForm(HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
-        if (sessionUser == null) {
-            // sessionUser가 null인 경우, 로그인 페이지로 리다이렉트
-            return "person/loginForm";
-        }
         User user = userRepository.findById(sessionUser.getId());
         request.setAttribute("user", user);
         return "person/updatePersonalForm";
     }
 
     @PostMapping("/person/info/update")
-    public String personInfoUpdate(UserRequest.PersonUpdateDTO requestDTO, HttpServletRequest request) {
+    public String personInfoUpdate(UserRequest.PersonUpdateDTO reqDTO, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) {
-            return "redirect:/person/loginForm";
-        }
-
-        // 프로필 저장
-        MultipartFile profile = requestDTO.getProfile();
-        String profileFilename = UUID.randomUUID() + "_" + profile.getOriginalFilename();
-        Path profilePath = Paths.get("./images/" + profileFilename);
-        try {
-            Files.write(profilePath, profile.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
         User user = userRepository.findById(sessionUser.getId());
         request.setAttribute("user", user);
 
-        // 새 비밀번호가 비어있으면 기존 비밀번호를 사용하도록 설정
-        if (StringUtils.isEmpty(requestDTO.getNewPassword())) {
-            requestDTO.setNewPassword(user.getPassword());
-        }
+        User updateUser = userRepository.Updateperson(sessionUser.getId(),reqDTO);
+        session.setAttribute("sessionUser", updateUser);
 
-        // requestDTO.setProfilePath(profilePath);
-        userRepository.personUpdate(requestDTO, sessionUser.getId(), profileFilename);
-
-        System.out.println(requestDTO);
         return "redirect:/person/info";
     }
 }

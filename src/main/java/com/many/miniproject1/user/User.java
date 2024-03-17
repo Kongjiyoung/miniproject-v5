@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 @Data
 @Entity // 테이블 생성하기 위해 필요한 어노테이션
 public class User {
+
     @Id // PK 설정
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment 전략
     private Integer id;
@@ -44,5 +45,12 @@ public class User {
         this.profile = profile;
         this.birth = birth;
         this.createdAt = createdAt;
+    }
+
+    public void personUpdate(UserRequest.PersonUpdateDTO reqDTO){
+        this.profile= reqDTO.getProfile();
+        this.address=reqDTO.getAddress();
+        this.tel=reqDTO.getTel();
+        this.password=reqDTO.getPassword();
     }
 }

@@ -28,15 +28,8 @@ public class UserRepository {
     }
 
     public User findById(int id) {
-        Query query = em.createNativeQuery("select * from user_tb where id=?", User.class);
-        query.setParameter(1, id);
-
-        try {
-            User user = (User) query.getSingleResult();
-            return user;
-        } catch (Exception e) {
-            return null;
-        }
+        User user = em.find(User.class, id);
+        return user;
     }
 
     @Transactional
@@ -55,16 +48,9 @@ public class UserRepository {
     }
 
     @Transactional
-    public void personSave(UserRequest.JoinDTO requestDTO, String profileFileName) {
-        Query query = em.createNativeQuery("insert into user_tb(role, birth, email, password, username, tel, address, profile, created_at) values('person',?,?,?,?,?,?,?,now())");
-        query.setParameter(1, requestDTO.getBirth());
-        query.setParameter(2, requestDTO.getEmail());
-        query.setParameter(3, requestDTO.getPassword());
-        query.setParameter(4, requestDTO.getUsername());
-        query.setParameter(5, requestDTO.getTel());
-        query.setParameter(6, requestDTO.getAddress());
-        query.setParameter(7, profileFileName);
-        query.executeUpdate();
+    public User personSave(User user) {
+        em.persist(user);
+        return user;
     }
 
 
@@ -77,30 +63,10 @@ public class UserRepository {
 //    }
 
     @Transactional
-    public void personUpdate(UserRequest.PersonUpdateDTO requestDTO, int id, String profileFileName) {
-        String updateQuery = "update user_tb set profile=?, tel=?, address=?";
-
-        // Check if newPassword is not empty, then update the password
-        if (StringUtils.isNotEmpty(requestDTO.getNewPassword())) {
-            updateQuery += ", password=?";
-        }
-        updateQuery += " where id = ?";
-
-        Query query = em.createNativeQuery(updateQuery);
-        query.setParameter(1, profileFileName);
-        query.setParameter(2, requestDTO.getTel());
-        query.setParameter(3, requestDTO.getAddress());
-
-        // If newPassword is not empty, set it; otherwise, set the existing password
-        if (StringUtils.isNotEmpty(requestDTO.getNewPassword())) {
-            query.setParameter(4, requestDTO.getNewPassword());
-            query.setParameter(5, id);
-        } else {
-            query.setParameter(4, requestDTO.getPassword());
-            query.setParameter(5, id);
-        }
-
-        query.executeUpdate();
+    public User Updateperson(int id, UserRequest.PersonUpdateDTO reqDTO) {
+        User user = findById(id);
+        user.personUpdate(reqDTO);
+        return user;
     }
 
     @Transactional
@@ -129,12 +95,5 @@ public class UserRepository {
         query.executeUpdate();
     }
 
-//    @Transactional
-//    public void passwordUpdate(UserRequest.PasswordChangeDTO requestDTO, int id) {
-//        Query query = em.createNativeQuery("update user_tb set password =? where id = ?");
-//        query.setParameter(1, requestDTO.getPassword());
-//        query.setParameter(2, id);
-//        query.executeUpdate();
-//
-//    }
+
 }

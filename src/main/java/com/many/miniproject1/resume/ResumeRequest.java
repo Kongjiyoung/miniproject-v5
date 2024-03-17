@@ -61,7 +61,6 @@ public class ResumeRequest {
 
     @Data
     public static class UpdateDTO {
-        private Integer id;
         private String title;
         private String profile;
         private String portfolio;

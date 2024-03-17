@@ -31,7 +31,7 @@ public class ResumeRepository {
     public Resume findByResumeId(int id) {
         Query query= em.createQuery("select r from Resume r join fetch r.user u where r.id= :id", Resume.class);
         query.setParameter("id", id);
-        return (Resume) query.getSingleResult();
+         return (Resume) query.getSingleResult();
     }
 
 

@@ -103,19 +103,20 @@ public class ResumeController{
         if (sessionUser == null) {
             return "redirect:/person/loginForm";
         }
-        //ResumeResponse.DetailDTO detailDTO = resumeRepository.findById(id);
-//        ResumeResponse.DetailDTO detailDTO= new ResumeResponse.DetailDTO(new Resume());
+        Resume resume = resumeRepository.findByResumeId(id);
 
-        //request.setAttribute("resume", detailDTO);
+
+        request.setAttribute("resume", resume);
         return "person/updateResumeForm";
     }
 
     @PostMapping("/person/resume/{id}/detail/update")
     public String personUpdateResume(@PathVariable int id, ResumeRequest.UpdateDTO requestDTO, HttpServletRequest request, @RequestParam("skill") List<String> skills) {
 
+        resumeRepository.update(id, requestDTO);
         // 업데이트된 이력서 정보와 스킬 정보를 반환
         request.setAttribute("resume", requestDTO);
-        request.setAttribute("skills", skills);
+        //request.setAttribute("skills", skills);
         return "redirect:/person/resume/" + id + "/detail";
 
     }

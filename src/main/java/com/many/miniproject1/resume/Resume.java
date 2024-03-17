@@ -45,7 +45,6 @@ public class Resume {
     }
 
     public void update(ResumeRequest.UpdateDTO reqDTO){
-        this.id = reqDTO.getId();
         this.title = reqDTO.getTitle();
         this.profile = reqDTO.getProfile();
         this.portfolio = reqDTO.getPortfolio();

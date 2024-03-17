@@ -2,6 +2,9 @@ package com.many.miniproject1.Resume;
 
 import com.many.miniproject1.resume.Resume;
 import com.many.miniproject1.resume.ResumeRepository;
+import com.many.miniproject1.resume.ResumeRequest;
+import jakarta.persistence.EntityManager;
+import org.hibernate.sql.Update;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -16,16 +19,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ResumeRepositoryTest {
     @Autowired
     private  ResumeRepository resumeRepository;
+    @Autowired
+    private EntityManager em;
     @Test
     public void update_test(){
         // given
-        int id=1
-                
-        
+        int id=1;
+        String title="제목수정";
+        ResumeRequest.UpdateDTO reqDTO = new ResumeRequest.UpdateDTO();
+        reqDTO.setTitle(title);
         // when
-        
-        
+        resumeRepository.update(id, reqDTO);
+        em.flush();
         // then
+        assertThat(resumeRepository.findByResumeId(id).getTitle()).isEqualTo("제목");
     }
 
     @Test

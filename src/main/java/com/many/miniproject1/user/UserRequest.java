@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserRequest {
     @Data
     public static class JoinDTO{
-        private MultipartFile profile; // 사용자가 업로드한 파일
+        private String profile;
         private String role;
         private String email;
         private String password;
@@ -16,6 +16,21 @@ public class UserRequest {
         private String address;
         private String birth;
         private String tel;
+
+        public User toEntity(){
+            return User.builder()
+                    .profile(profile)
+                    .role(role)
+                    .email(email)
+                    .password(password)
+                    .username(username)
+                    .companyName(companyName)
+                    .companyNum(companyNum)
+                    .address(address)
+                    .birth(birth)
+                    .tel(tel)
+                    .build();
+        }
 
     }
 
@@ -39,16 +54,10 @@ public class UserRequest {
     }
     @Data
     public static class PersonUpdateDTO {
-        private MultipartFile profile;
-        // private String profilePath;
-        private String username;
+        private String profile;
         private String address;
-        private String birth;
         private String tel;
-        private String email;
         private String password;
-        private String newPassword;
-
     }
 
     @Data
