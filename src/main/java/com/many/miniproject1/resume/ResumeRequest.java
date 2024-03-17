@@ -1,5 +1,6 @@
 package com.many.miniproject1.resume;
 
+import com.many.miniproject1.user.User;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,15 +20,26 @@ public class ResumeRequest {
     @Data
     public static class SaveDTO{
         private Integer id;
-        private Integer personId;
         private String title;
-        private MultipartFile profile;
+        private String profile;
         private String portfolio;
         private String introduce;
         private String career;
         private String simpleIntroduce;
-        private List<String> skill;
-//        private Timestamp createdAt;
+
+        public Resume toEntity(User user){
+            return Resume.builder()
+                    .id(id)
+                    .title(title)
+                    .profile(profile)
+                    .portfolio(portfolio)
+                    .introduce(introduce)
+                    .career(career)
+                    .simpleIntroduce(simpleIntroduce)
+                    .user(user)
+                    .build();
+        }
+
     }
 
     @Data
@@ -50,13 +62,11 @@ public class ResumeRequest {
     @Data
     public static class UpdateDTO {
         private Integer id;
-        private Integer personId;
         private String title;
-        private MultipartFile profile;
+        private String profile;
         private String portfolio;
         private String introduce;
         private String career;
         private String simpleIntroduce;
-        private List<String> skill;
     }
 }

@@ -25,27 +25,28 @@
                         <div class="jh_resume_flexbox mt-3">
                             <div class="jh_resume_personal_info">
                                 <div class="input-group mb-3">
-                                    <input type="file" class="form-control mt-2" accept="image/*"
-                                           name="profile" id="profile" multiple required/>
-                                    <script>
-                                        $('#profile').change(function () {
-                                            let input = this;
-                                            if (input.files && input.files[0]) {
-                                                let reader = new FileReader();
+                                    <!--  type="file"  accept="image/*"-->
+                                    <input class="form-control mt-2" type="text"
+                                           value="null" name="profile" id="profile" multiple required/>
+<!--                                    <script>-->
+<!--                                        $('#profile').change(function () {-->
+<!--                                            let input = this;-->
+<!--                                            if (input.files && input.files[0]) {-->
+<!--                                                let reader = new FileReader();-->
 
-                                                reader.onload = function (e) {
-                                                    $('#profilePreview').html('<img src="' + e.target.result + '" style="max-width: 100%;">');
-                                                };
+<!--                                                reader.onload = function (e) {-->
+<!--                                                    $('#profilePreview').html('<img src="' + e.target.result + '" style="max-width: 100%;">');-->
+<!--                                                };-->
 
-                                                reader.readAsDataURL(input.files[0]);
+<!--                                                reader.readAsDataURL(input.files[0]);-->
 
-                                                // 파일명 출력
-                                                let fileName = input.files[0].name;
-                                                $('#profile').val(fileName);
-                                                console.log(fileName);
-                                            }
-                                        });
-                                    </script>
+<!--                                                // 파일명 출력-->
+<!--                                                let fileName = input.files[0].name;-->
+<!--                                                $('#profile').val(fileName);-->
+<!--                                                console.log(fileName);-->
+<!--                                            }-->
+<!--                                        });-->
+<!--                                    </script>-->
                                 </div>
 
 <!--                                <div class="input-group mb-3">-->

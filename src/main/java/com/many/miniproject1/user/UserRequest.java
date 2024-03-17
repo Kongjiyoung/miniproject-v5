@@ -53,7 +53,6 @@ public class UserRequest {
 
     @Data
     public static class LoginDTO {
-        private String role;
         private String email;
         private String password;
     }

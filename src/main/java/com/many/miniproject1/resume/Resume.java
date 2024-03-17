@@ -43,4 +43,14 @@ public class Resume {
         this.simpleIntroduce = simpleIntroduce;
         this.createdAt = createdAt;
     }
+
+    public void update(ResumeRequest.UpdateDTO reqDTO){
+        this.id = reqDTO.getId();
+        this.title = reqDTO.getTitle();
+        this.profile = reqDTO.getProfile();
+        this.portfolio = reqDTO.getPortfolio();
+        this.introduce = reqDTO.getIntroduce();
+        this.career = reqDTO.getCareer();
+        this.simpleIntroduce = reqDTO.getSimpleIntroduce();
+    }
 }

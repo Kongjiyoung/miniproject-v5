@@ -74,20 +74,16 @@ public class UserController {
 
     @PostMapping("/company/login")
     public String companyLogin(UserRequest.LoginDTO requestDTO) {
-        System.out.println(requestDTO);
+        User sessionUser = userRepository.findByEmailAndPassword(requestDTO);
 
-        User user = userRepository.findByEmailAndPassword(requestDTO);
-        if (user == null) {
-            return "/company/loginForm";
-        } else if (!user.getRole().equals("company")) {
-            return "error/404";
-        } else { // 조회 됐음 (인증됨)
-            Boolean isCompany;
-            isCompany = true;
-            session.setAttribute("sessionUser", user);
-            session.setAttribute("isCompany", isCompany);
+        if(sessionUser==null){
+            return "redirect:/company/loginForm";
+        }
+        if (sessionUser.getRole().equals("person")){
+            return "redirect:/person/loginForm";
         }
 
+        session.setAttribute("sessionUser", sessionUser);
         return "redirect:/company/main";
     }
 
@@ -128,23 +124,18 @@ public class UserController {
 
     @PostMapping("/person/login")
     public String personLogin(UserRequest.LoginDTO requestDTO) {
-        System.out.println(requestDTO);
-//        if (requestDTO.getEmail().length() < 3) {
-//            return "error/400";
-//        }
 
-        User user = userRepository.findByEmailAndPassword(requestDTO);
+        User sessionUser = userRepository.findByEmailAndPassword(requestDTO);
 
-        if (user == null) {
-            return "/person/loginForm";
-        } else if (!user.getRole().equals("person")) {
-            return "error/404";
-        } else { // 조회 됐음 (인증됨)
-            Boolean isPerson;
-            isPerson = true;
-            session.setAttribute("sessionUser", user);
-            session.setAttribute("isPerson", isPerson);
+        if(sessionUser==null){
+            return "redirect:/person/loginForm";
         }
+        if (sessionUser.getRole().equals("company")){
+            return "redirect:/company/loginForm";
+        }
+
+        session.setAttribute("sessionUser", sessionUser);
+
         return "redirect:/person/main";
     }
 

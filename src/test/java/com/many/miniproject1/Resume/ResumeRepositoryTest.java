@@ -16,7 +16,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ResumeRepositoryTest {
     @Autowired
     private  ResumeRepository resumeRepository;
+    @Test
+    public void update_test(){
+        // given
+        int id=1
+                
+        
+        // when
+        
+        
+        // then
+    }
 
+    @Test
+    public void deleteById_test(){
+        // given
+        int id = 1;
+        
+        // when
+        resumeRepository.deleteById(id);
+        List<Resume> resumeList=resumeRepository.findAll();
+        // then
+        assertThat(resumeList.size()).isEqualTo(15);
+    }
+    
     @Test
     public void findPersonId_Test(){
         //given

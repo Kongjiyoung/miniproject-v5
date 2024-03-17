@@ -36,35 +36,8 @@ public class ResumeRepository {
 
 
     @Transactional
-    public Integer save(ResumeRequest.SaveDTO requestDTO, String profileFileName) {
-        String q = """
-                      insert into resume_tb(person_id, title,  profile, portfolio, introduce, career,
-                      simple_introduce, created_at) 
-                      values (?, ?, ?, ?, ?, ?, ?, now());
-                """;
-
-        Query query = em.createNativeQuery(q);
-
-        query.setParameter(1, requestDTO.getPersonId());
-        query.setParameter(2, requestDTO.getTitle());
-
-        query.setParameter(3, profileFileName);
-
-        query.setParameter(4, requestDTO.getPortfolio());
-        query.setParameter(5, requestDTO.getIntroduce());
-        query.setParameter(6, requestDTO.getCareer());
-        query.setParameter(7, requestDTO.getSimpleIntroduce());
-
-//        query.setParameter(8, requestDTO.getSkill());
-
-
-        query.executeUpdate();
-
-        // max pk 받아서 리턴!!
-        Query maxQquery = em.createNativeQuery("select max(id) from resume_tb");
-        Integer resumeId = (Integer) maxQquery.getSingleResult();
-        return resumeId;
-
+    public void save(Resume resume) {
+        em.persist(resume);
     }
 
     public List<ResumeResponse.DetailDTO> findresume(int u_id) {
@@ -98,25 +71,9 @@ public class ResumeRepository {
     }
 
     @Transactional
-    public void update(int id, ResumeRequest.UpdateDTO requestDTO, String profileFileName) {
-        Query query = em.createNativeQuery("update resume_tb set title=?, profile=?, portfolio=?, introduce=?, career=?, simple_introduce=? where id = ?");
-        System.out.println(requestDTO.getTitle());
-        System.out.println(profileFileName);
-        System.out.println(requestDTO.getPortfolio());
-        System.out.println(requestDTO.getIntroduce());
-        System.out.println(requestDTO.getCareer());
-        System.out.println(requestDTO.getSimpleIntroduce());
-        System.out.println(id);
-        query.setParameter(1, requestDTO.getTitle());
-        query.setParameter(2, profileFileName);
-        query.setParameter(3, requestDTO.getPortfolio());
-        query.setParameter(4, requestDTO.getIntroduce());
-        query.setParameter(5, requestDTO.getCareer());
-        query.setParameter(6, requestDTO.getSimpleIntroduce());
-        query.setParameter(7, id);
-
-        query.executeUpdate();
-
+    public void update(int id, ResumeRequest.UpdateDTO reqDTO) {
+        Resume resume=findByResumeId(id);
+        resume.update(reqDTO);
     }
 
     public void skilldelete(int id) {
@@ -127,9 +84,9 @@ public class ResumeRepository {
     }
 
     @Transactional
-    public void delete(int id) {
-        Query query = em.createNativeQuery("delete from resume_tb where id = ?");
-        query.setParameter(1, id);
+    public void deleteById(int rid) {
+        Query query = em.createQuery("delete from Resume r where r.id = :id");
+        query.setParameter("id", rid);
 
         query.executeUpdate();
     }
