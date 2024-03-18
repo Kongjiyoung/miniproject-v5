@@ -34,7 +34,7 @@ public class UserController {
     private final HttpSession session;
     private final Environment env;
     private final UserFileService userFileService;
-
+    private final UserService userService;
     // 회사 회원가입
     @GetMapping("/company/joinForm")
     public String companyJoinForm() {
@@ -78,9 +78,8 @@ public class UserController {
     }
 
     @PostMapping("/person/join")
-    public String personJoin(UserRequest.JoinDTO requestDTO) {
-        requestDTO.setRole("person");
-        userRepository.personSave(requestDTO.toEntity());
+    public String personJoin(UserRequest.JoinDTO reqDTO) {
+        userService.회원가입(reqDTO);
         return "redirect:/person/loginForm";
     }
 
