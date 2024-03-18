@@ -29,7 +29,7 @@ public class User {
     private String profile;
     private String birth;
     @CreationTimestamp
-    private Timestamp createdAt;
+    private Timestamp createdAt;//
 
     @Builder
     public User(Integer id, String role, String email, String password, String username, String tel, String companyName, String address, String companyNum, String profile, String birth, Timestamp createdAt) {
