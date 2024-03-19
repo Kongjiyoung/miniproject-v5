@@ -16,10 +16,11 @@ public class UserService {
     @Transactional
     public void 회원가입(UserRequest.JoinDTO reqDTO){
         reqDTO.setRole("person");
-        Optional<User> userOP=userJPARepository.findByEmail(reqDTO.getUsername());
+        Optional<User> userOP=userJPARepository.findByEmail(reqDTO.getEmail());
 
         if(userOP.isPresent()){
             throw new Exception400("중복된 이메일입니다");
         }
+        userJPARepository.save(reqDTO.toEntity());
     }
 }
