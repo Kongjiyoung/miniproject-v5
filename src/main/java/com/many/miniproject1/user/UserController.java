@@ -35,6 +35,41 @@ public class UserController {
     private final Environment env;
     private final UserFileService userFileService;
     private final UserService userService;
+
+    //개인 프로필 정보 및 수정
+    @GetMapping("/person/info")
+    public String personal(HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        User user = userService.회원조회(sessionUser.getId());
+
+        request.setAttribute("user", user);
+
+        return "person/personalInfo";
+    }
+
+    @GetMapping("/person/info/updateForm")
+    public String personInfoInfoUpdateForm(HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        User user = userService.회원조회(sessionUser.getId());
+        request.setAttribute("user", user);
+        return "person/updatePersonalForm";
+    }
+
+    @PostMapping("/person/info/update")
+    public String personInfoUpdate(UserRequest.PersonUpdateDTO reqDTO, HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        User user = userRepository.findById(sessionUser.getId());
+        request.setAttribute("user", user);
+
+        User updateUser = userService.회원수정(user.getId(),reqDTO);
+        session.setAttribute("sessionUser", updateUser);
+
+        return "redirect:/person/info";
+    }
+
     // 회사 회원가입
     @GetMapping("/company/joinForm")
     public String companyJoinForm() {
@@ -90,17 +125,8 @@ public class UserController {
     }
 
     @PostMapping("/person/login")
-    public String personLogin(UserRequest.LoginDTO requestDTO) {
-
-        User sessionUser = userRepository.findByEmailAndPassword(requestDTO);
-
-        if(sessionUser==null){
-            return "redirect:/person/loginForm";
-        }
-        if (sessionUser.getRole().equals("company")){
-            return "redirect:/company/loginForm";
-        }
-
+    public String personLogin(UserRequest.LoginDTO reqDTO) {
+        User sessionUser=userService.로그인(reqDTO);
         session.setAttribute("sessionUser", sessionUser);
 
         return "redirect:/person/main";
@@ -173,40 +199,5 @@ public class UserController {
         return "redirect:/company/info";
     }
 
-    //개인 프로필 정보 및 수정
-    @GetMapping("/person/info")
-    public String personal(HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) {
-            // sessionUser가 null인 경우, 로그인 페이지로 리다이렉트
-            return "/person/loginForm";
-        }
-        User user = userRepository.findById(sessionUser.getId());
 
-        request.setAttribute("user", user);
-
-        return "person/personalInfo";
-    }
-
-    @GetMapping("/person/info/updateForm")
-    public String personInfoInfoUpdateForm(HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-
-        User user = userRepository.findById(sessionUser.getId());
-        request.setAttribute("user", user);
-        return "person/updatePersonalForm";
-    }
-
-    @PostMapping("/person/info/update")
-    public String personInfoUpdate(UserRequest.PersonUpdateDTO reqDTO, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-
-        User user = userRepository.findById(sessionUser.getId());
-        request.setAttribute("user", user);
-
-        User updateUser = userRepository.Updateperson(sessionUser.getId(),reqDTO);
-        session.setAttribute("sessionUser", updateUser);
-
-        return "redirect:/person/info";
-    }
 }
