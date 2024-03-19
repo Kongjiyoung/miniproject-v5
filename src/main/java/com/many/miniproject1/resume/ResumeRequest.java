@@ -68,4 +68,13 @@ public class ResumeRequest {
         private String career;
         private String simpleIntroduce;
     }
+
+    @Data
+    public static class ListDTO {
+        private Integer id;
+        private String title;
+        private String profile;
+        private String career;
+        private String simpleIntroduce;
+    }
 }
